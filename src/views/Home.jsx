@@ -33,6 +33,12 @@ export default function Home() {
 		fetchData()
 	}, [])
 
+	// MARK: Callbacks
+
+	let select = (selected) => {
+		console.log('Selected ' + selected)
+	}
+
 	// MARK: - Load teams' details
 	useEffect(() => {
 		teams.map(team => {
@@ -41,7 +47,6 @@ export default function Home() {
 					setLoadingDetails(true)
 					let result = await axios(config.api + '/team/' + team.id)
 					if (result.data) {
-						console.log(JSON.stringify(result.data))
 						setTeamDetails(t => [...t, result.data])
 					}
 					setLoadingDetails(false)
@@ -63,7 +68,7 @@ export default function Home() {
 
 			{loading ? (<div>Loading...</div>) : (
 				teams !== undefined &&
-				<Team teams={ teams } />
+				<Team teams={teams} select={select} />
 			)}
 
 			{loadingDetails ? (<div>Loading...</div>) : (
