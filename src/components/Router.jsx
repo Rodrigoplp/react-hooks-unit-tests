@@ -3,26 +3,27 @@ import { Router as ReactRouter, Route, Switch } from 'react-router-dom'
 import { createBrowserHistory as createHistory } from 'history'
 
 /* Site */
-import Home from 'views/Home'
-import Team from 'views/Team'
-import Member from 'views/Member'
+import Home from '../views/Home'
+// import Team from '../views/Team'
+// import Member from '../views/Member'
 
 const history = createHistory()
 history.listen(location => {
 	window.scrollTo(0,0)
 })
 
-export function Router(props) {
+export default function Router(props) {
 	return (
 		<ReactRouter history = { history }>
 			<Switch>
 				<Route exact path='/' component={Home} />
-				<Route exact path='/team' render={(props) => <Team {...props} />} />
-				<Route exact path='/member' render={(props) => <Member {...props} />} />
 			</Switch>
 		</ReactRouter>
 	)
 }
+
+// <Route exact path='/team' render={(props) => <Team {...props} />} />
+// <Route exact path='/member' render={(props) => <Member {...props} />} />
 
 // class Router extends React.Component {
 //   constructor(props) {
