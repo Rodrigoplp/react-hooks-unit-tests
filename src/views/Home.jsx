@@ -7,19 +7,21 @@ export default function Home() {
 	// MARK: State
 	let [loading, setLoading] = useState(true)
 	let [loadingDetails, setLoadingDetails] = useState(true)
+	let [loadingUsers, setLoadingUsers] = useState(true)
 	let [teams, setTeams] = useState([])
-	let [members, setMembers] = useState([])
+	let [users, setUsers] = useState([])
 	let [teamDetails, setTeamDetails] = useState([])
 
 	// MARK: Effects
 	
-	// MAKR: - Load teams from Tempo backend on initialization
+	// MARK: - Load teams from Tempo backend on initialization
 	useEffect(() => {
 		let fetchData = async() => {
 			setLoading(true)
 			try {
 				let result = await axios(config.api + '/team/')
 				if (result.data) {
+					console.log('teams fetched')
 					setTeams(result.data)
 				}
 				setLoading(false)
@@ -33,45 +35,84 @@ export default function Home() {
 		fetchData()
 	}, [])
 
-	// MARK: Callbacks
-
-	let select = (selected) => {
-		console.log('Selected ' + selected)
-	}
-
 	// MARK: - Load teams' details
 	useEffect(() => {
+		let fetched = 0
+
 		teams.map(team => {
 			let fetchData = async() => {
 				try {
 					setLoadingDetails(true)
 					let result = await axios(config.api + '/team/' + team.id)
 					if (result.data) {
+						fetched++
 						setTeamDetails(t => [...t, result.data])
+						if (fetched === teams.length) {
+							setLoadingDetails(false)
+						}
 					}
-					setLoadingDetails(false)
 				}
 				catch(err) {
-					setLoadingDetails(false)
+					fetched++
+					if (fetched === teams.length) {
+							setLoadingDetails(false)
+					}
 					console.log('Fetch data error: ' + err)
 				}
 			}
 
 			fetchData()
+
+			return null
 		})
 	}, [teams])
+
+	// MARK: - Load users
+	useEffect(() => {
+		let fetchData = async() => {
+			setLoadingUsers(true)
+			try {
+				let result = await axios(config.api + '/user/')
+				if (result.data) {
+					setUsers(result.data)
+				}
+				setLoadingUsers(false)
+			}
+			catch(err) {
+				setLoadingUsers(false)
+				console.log('Fetch data error: ' + err)
+			}
+		}
+
+		fetchData()
+	}, [])
+
+	// MARK: Callbacks
+
+	let selectTeam = (selectedTeam) => {
+		console.log('Selected team ' + selectedTeam)
+	}
+
+	let selectUser = (selectedUser) => {
+		console.log('Selected user ' + selectedUser)
+	}
 
 	// MARK: Return
 	return (
 		<div className='home'>
 			<h1>Tempo</h1>
 
-			{loading ? (<div>Loading...</div>) : (
+			{loading || loadingUsers ? (<div>Loading...</div>) : (
 				teams !== undefined &&
-				<Team teams={teams} select={select} />
+				<Team
+					teams = {teams} 
+					users = {users}
+					selectTeam = {selectTeam}
+					selectUser = {selectUser}
+				/>
 			)}
 
-			{loadingDetails ? (<div>Loading...</div>) : (
+			{loadingDetails || loadingUsers ? (<div>Loading...</div>) : (
 				teamDetails !== undefined &&
 				<div className='details'>
 					<ul className='list'>

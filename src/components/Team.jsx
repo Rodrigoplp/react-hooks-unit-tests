@@ -1,12 +1,12 @@
 import React from 'react'
 
-export default function Team({ teams, select }) {
+export default function Team({ teams, users, selectTeam, selectUser }) {
 	return (
 		<div className='teams'>
 			<ul className='list'>
 				{teams.map(team => (
 					<li className = 'list-item' key={team.id}>
-						<button onClick={() => select(team.name)}>
+						<button onClick={() => selectTeam(team.name)}>
 							{ team.name }
 						</button>
 					</li>
