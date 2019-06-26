@@ -1,28 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Router as ReactRouter, Route, Switch } from 'react-router-dom'
-import { createBrowserHistory as createHistory } from 'history'
+import history from '../history.js'
+// import { createBrowserHistory as createHistory } from 'history'
 
 /* Site */
 import Home from '../views/Home'
-// import Team from '../views/Team'
+import Team from '../views/Team'
 // import Member from '../views/Member'
 
-const history = createHistory()
+// const history = createHistory()
 history.listen(location => {
 	window.scrollTo(0,0)
 })
 
 export default function Router(props) {
+	let [team, setTeam] = useState('Rodrigo')
+	
+	let teamCallback = (el) => {
+		setTeam(el)
+	}
+
 	return (
 		<ReactRouter history = { history }>
 			<Switch>
-				<Route exact path='/' component={Home} />
+				<Route exact path='/' render={(props) => <Home teamCallback={teamCallback} {...props} />} />
+				<Route exact path='/team' render={(props) => <Team teamId={team} {...props} />} />
 			</Switch>
 		</ReactRouter>
 	)
 }
 
-// <Route exact path='/team' render={(props) => <Team {...props} />} />
 // <Route exact path='/member' render={(props) => <Member {...props} />} />
 
 // class Router extends React.Component {

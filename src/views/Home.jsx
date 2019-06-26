@@ -1,10 +1,12 @@
+// MARK: Definitions
 import React, { useState, useEffect } from 'react'
+import history from  '../history.js'
 import axios from 'axios'
 import config from '../config.json'
 import Team from '../components/Team.jsx'
 import FilterForm from '../components/FilterForm.jsx'
 
-export default function Home() {
+export default function Home(props) {
 	// MARK: State
 	let [loading, setLoading] = useState(true)
 	let [loadingDetails, setLoadingDetails] = useState(true)
@@ -93,6 +95,9 @@ export default function Home() {
 
 	let selectTeam = (selectedTeam) => {
 		console.log('Selected team ' + selectedTeam)
+
+		props.teamCallback('Pedroso')
+		history.push('/team')
 	}
 
 	let selectUser = (selectedUser) => {
