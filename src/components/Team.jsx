@@ -6,9 +6,11 @@ export default function Team({ teams, users, selectTeam, selectUser }) {
 			<ul className='list'>
 				{teams.map(team => (
 					<li className = 'list-item' key={team.id}>
-						<button onClick={() => selectTeam(team.name)}>
-							{ team.name }
-						</button>
+						<div>
+							<button onClick={() => selectTeam(team.name)}>
+								{ team.name }
+							</button>
+						</div>
 					</li>
 				))}
 			</ul>

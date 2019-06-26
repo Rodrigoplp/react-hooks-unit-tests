@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import config from '../config.json'
 import Team from '../components/Team.jsx'
+import FilterForm from '../components/FilterForm.jsx'
 
 export default function Home() {
 	// MARK: State
@@ -11,18 +12,19 @@ export default function Home() {
 	let [teams, setTeams] = useState([])
 	let [users, setUsers] = useState([])
 	let [teamDetails, setTeamDetails] = useState([])
+	let [filteredTeams, setFilteredTeams] = useState([])
 
 	// MARK: Effects
 	
-	// MARK: - Load teams from Tempo backend on initialization
+	// MARK: - Load teams
 	useEffect(() => {
 		let fetchData = async() => {
 			setLoading(true)
 			try {
 				let result = await axios(config.api + '/team/')
 				if (result.data) {
-					console.log('teams fetched')
 					setTeams(result.data)
+					setFilteredTeams(result.data)
 				}
 				setLoading(false)
 			}
@@ -97,18 +99,28 @@ export default function Home() {
 		console.log('Selected user ' + selectedUser)
 	}
 
+	let filterCallback = (e) => {
+		let filtered = teams.filter(team => {
+			return team.name.toUpperCase().includes(e.target.value.toUpperCase())
+		})
+
+		setFilteredTeams(filtered)
+	}
+
 	// MARK: Return
 	return (
 		<div className='home'>
 			<h1>Tempo</h1>
 
+			<FilterForm filterCallback = { filterCallback } />
+
 			{loading || loadingUsers ? (<div>Loading...</div>) : (
 				teams !== undefined &&
 				<Team
-					teams = {teams} 
-					users = {users}
-					selectTeam = {selectTeam}
-					selectUser = {selectUser}
+					teams = { filteredTeams }
+					users = { users }
+					selectTeam = { selectTeam }
+					selectUser = { selectUser }
 				/>
 			)}
 
