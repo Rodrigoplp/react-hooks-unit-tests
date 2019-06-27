@@ -20,9 +20,12 @@ export default function Member(props) {
 				let result = await axios(config.api + '/user/' + props.userId)
 				if (result.data) {
 					setUser(result.data)
+
 					result.data.member_teams.map(teamId => {
 						let arr = props.teams.filter(el => el.id === teamId)
 						setTeamNames(t => [...t, arr[0].name])
+
+						return null
 					})
 				}
 				setLoading(false)
@@ -36,24 +39,12 @@ export default function Member(props) {
 		fetchData()
 	}, [props])
 
-	// useEffect(() => {
-	// 	user.member_teams.map(teamId => {
-	// 		let arr = props.teams.filter(el => el.id === teamId)
-	// 		setTeamNames(t => [...t, arr[0].name])
-
-	// 		return null
-	// 	})
-	// }, [props, user])
 
 	// MARK: Helpers
-	let teamData = (teamId) => {
-		let arr = props.teams.filter(el => el.id === teamId)
-		return arr[0].name
-	}
-
 	let navBack = () => {
 		history.push('/team')
 	}
+
 
 	// MARK: Return
 	return (

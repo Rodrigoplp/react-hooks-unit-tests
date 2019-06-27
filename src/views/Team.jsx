@@ -10,7 +10,8 @@ export default function Team(props) {
 	// MARK: State
 	let [loading, setLoading] = useState(true)
 	let [team, setTeam] = useState([])
-	let [filteredTeams, setFilteredTeams] = useState([])
+	let [members, setMembers] = useState([])
+	let [filteredMembers, setFilteredMembers] = useState([])
 
 	// MARK: Effect
 	// MARK: - Load user info from Tempo backend on initialization
@@ -21,6 +22,18 @@ export default function Team(props) {
 				let result = await axios(config.api + '/team/' + props.teamProps.id)
 				if (result.data) {
 					setTeam(result.data)
+
+					result.data.members.map(memberId => {
+						let arr = props.usersProps.filter(el => el.id === memberId)
+						let tupple = {
+							name: arr[0].name,
+							id: memberId
+						}
+						setMembers(t => [...t, tupple])
+						setFilteredMembers(t => [...t, tupple])
+
+						return null
+					})
 				}
 				setLoading(false)
 			}
@@ -44,6 +57,14 @@ export default function Team(props) {
 		history.push('/member')
 	}
 
+	let filterCallback = (e) => {
+		let filtered = members.filter(member => {
+			return member.name.toUpperCase().includes(e.target.value.toUpperCase())
+		})
+
+		setFilteredMembers(filtered)
+	}
+
 	let navBack = () => {
 		history.push('/')
 	}
@@ -51,11 +72,14 @@ export default function Team(props) {
 	// MARK: Return
 	return (
 		<div className='user'>
+
 			<button onClick={navBack}>Back</button>
 
 			{props.teamProps !== undefined &&
-				<h1>{props.teamProps.name}</h1>
+			<h1>{props.teamProps.name}</h1>
 			}
+
+			<FilterForm filterCallback = { filterCallback } />
 
 			{loading ? (<div>Loading...</div>) : (
 				team !== undefined &&	
@@ -65,18 +89,19 @@ export default function Team(props) {
 					<p>{ userData(team.lead) }</p>
 
 					<h2>Team members</h2>
-					
+
 					<ul className='list'>
-						{team.members.map((member, index) => (
+						{filteredMembers.map((member, index) => (
 							<li className = 'list-item' key={index}>
-								<button onClick={() => selectUser(member)}>
-									{ userData(member) }
+								<button onClick={() => selectUser(member.id)}>
+									{member.name}
 								</button>
 							</li>
 						))}
 					</ul>
 				</div>
 			)}
+
 		</div>
 	)
 }
