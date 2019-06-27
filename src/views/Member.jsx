@@ -3,14 +3,13 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import history from  '../history.js'
 import config from '../config.json'
-import FilterForm from '../components/FilterForm.jsx'
 
 // teamProps, usersProps, userIdCallback
-export default function Team(props) {
+export default function Member(props) {
 	// MARK: State
 	let [loading, setLoading] = useState(true)
-	let [team, setTeam] = useState([])
-	let [filteredTeams, setFilteredTeams] = useState([])
+	let [user, setUser] = useState([])
+	let [teamNames, setTeamNames] = useState([])
 
 	// MARK: Effect
 	// MARK: - Load user info from Tempo backend on initialization
@@ -18,9 +17,13 @@ export default function Team(props) {
 		let fetchData = async() => {
 			setLoading(true)
 			try {
-				let result = await axios(config.api + '/team/' + props.teamProps.id)
+				let result = await axios(config.api + '/user/' + props.userId)
 				if (result.data) {
-					setTeam(result.data)
+					setUser(result.data)
+					result.data.member_teams.map(teamId => {
+						let arr = props.teams.filter(el => el.id === teamId)
+						setTeamNames(t => [...t, arr[0].name])
+					})
 				}
 				setLoading(false)
 			}
@@ -33,19 +36,23 @@ export default function Team(props) {
 		fetchData()
 	}, [props])
 
+	// useEffect(() => {
+	// 	user.member_teams.map(teamId => {
+	// 		let arr = props.teams.filter(el => el.id === teamId)
+	// 		setTeamNames(t => [...t, arr[0].name])
+
+	// 		return null
+	// 	})
+	// }, [props, user])
+
 	// MARK: Helpers
-	let userData = (userId) => {
-		let arr = props.usersProps.filter(el => el.id === userId)
+	let teamData = (teamId) => {
+		let arr = props.teams.filter(el => el.id === teamId)
 		return arr[0].name
 	}
 
-	let selectUser = (id) => {
-		props.userIdCallback(id)
-		history.push('/member')
-	}
-
 	let navBack = () => {
-		history.push('/')
+		history.push('/team')
 	}
 
 	// MARK: Return
@@ -53,30 +60,27 @@ export default function Team(props) {
 		<div className='user'>
 			<button onClick={navBack}>Back</button>
 
-			{props.teamProps !== undefined &&
-				<h1>{props.teamProps.name}</h1>
-			}
+
 
 			{loading ? (<div>Loading...</div>) : (
-				team !== undefined &&	
+				user !== undefined &&
 				<div>
-					<h2>Team lead</h2>
+					<h1>{user.name}</h1>
 
-					<p>{ userData(team.lead) }</p>
+					<h2>Username:</h2>
+					<p>{user.username}</p>
 
-					<h2>Team members</h2>
-					
+					<h2>Member of:</h2>
 					<ul className='list'>
-						{team.members.map((member, index) => (
+						{teamNames.map((name, index) => (
 							<li className = 'list-item' key={index}>
-								<button onClick={() => selectUser(member)}>
-									{ userData(member) }
-								</button>
+								{name}	
 							</li>
 						))}
 					</ul>
 				</div>
 			)}
+
 		</div>
 	)
 }

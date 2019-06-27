@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import history from  '../history.js'
 import axios from 'axios'
 import config from '../config.json'
-import Team from '../components/Team.jsx'
+import TeamList from '../components/TeamList.jsx'
 import FilterForm from '../components/FilterForm.jsx'
 
 export default function Home(props) {
@@ -94,9 +94,9 @@ export default function Home(props) {
 	// MARK: Callbacks
 
 	let selectTeam = (selectedTeam) => {
-		console.log('Selected team ' + selectedTeam)
-
-		props.teamCallback('Pedroso')
+		props.teamCallback(selectedTeam)
+		props.usersCallback(users)
+		props.allTeamsCallback(teams)
 		history.push('/team')
 	}
 
@@ -121,7 +121,7 @@ export default function Home(props) {
 
 			{loading || loadingUsers ? (<div>Loading...</div>) : (
 				teams !== undefined &&
-				<Team
+				<TeamList
 					teams = { filteredTeams }
 					users = { users }
 					selectTeam = { selectTeam }
