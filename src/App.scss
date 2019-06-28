@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css?family=Covered+By+Your+Grace&display=swap');
 
 .app {
+	text-align: center;
+
 	.header {
 		margin-bottom: 3em;
 		height: 10em;
@@ -15,10 +17,22 @@
 		}
 	}
 
+	.back {
+		width: 80%;
+		margin: auto;
+
+		.back-btn {
+			display: flex;
+			height: 30px;
+			background-color: unset;
+		}
+	}
+
 	.list {
 		list-style-type: none;
-		width: 60em;
+		max-width: 60em;
 		margin: auto;
+		padding: 0;
 
 		.list-item {
 			display: inline-block;

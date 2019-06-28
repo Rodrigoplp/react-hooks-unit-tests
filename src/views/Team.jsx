@@ -87,13 +87,15 @@ export default function Team(props) {
 	return (
 		<div className='team'>
 
-			<button onClick={navBack}>Back</button>
-
 			{props.teamProps !== undefined &&
 				<div className='header'>
-					<h1>{props.teamProps.name}</h1>
+					<h1>Team {props.teamProps.name}</h1>
 				</div>
 			}
+
+			<div className='back'>
+				<button className='back-btn' onClick={navBack}>{`< Back to teams`}</button>
+			</div>
 
 			<FilterForm filterCallback = { filterCallback } />
 
@@ -102,7 +104,9 @@ export default function Team(props) {
 				<div>
 					<h2>Team lead</h2>
 
-					<p>{ userData(team.lead) }</p>
+					<button className='selector-btn' onClick={() => selectUser(team.lead)}>
+						{userData(team.lead)}
+					</button>
 
 					<h2>Team members</h2>
 

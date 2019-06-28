@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import history from  '../history.js'
 import config from '../config.json'
+import './Member.scss'
 
 // teamProps, usersProps, userIdCallback
 export default function Member(props) {
@@ -11,7 +12,7 @@ export default function Member(props) {
 	let [user, setUser] = useState([])
 	let [teamNames, setTeamNames] = useState([])
 
-	// MARK: Effect
+	// MARK: Effects
 	// MARK: - Load user info from Tempo backend on initialization
 	useEffect(() => {
 		let fetchData = async() => {
@@ -33,6 +34,7 @@ export default function Member(props) {
 			catch(err) {
 				setLoading(false)
 				console.log('Fetch data error: ' + err)
+				history.push('/')
 			}
 		}
 
@@ -48,24 +50,31 @@ export default function Member(props) {
 
 	// MARK: Return
 	return (
-		<div className='user'>
-			<button onClick={navBack}>Back</button>
-
-
+		<div className='member'>
 
 			{loading ? (<div>Loading...</div>) : (
 				user !== undefined &&
 				<div>
-					<h1>{user.name}</h1>
+					<div className='header'>
+						<h1>Member {user.name}</h1>
+					</div>
+
+					<div className='back'>
+						<button className='back-btn' onClick={navBack}>{`< Back to team`}</button>
+					</div>
 
 					<h2>Username:</h2>
-					<p>{user.username}</p>
+					<div className='username'>
+						<p>{user.username}</p>
+					</div>
 
 					<h2>Member of:</h2>
 					<ul className='list'>
 						{teamNames.map((name, index) => (
-							<li className = 'list-item' key={index}>
-								{name}	
+							<li className='list-item' key={index}>
+								<div className='username'>
+									{name}
+								</div>
 							</li>
 						))}
 					</ul>
