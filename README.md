@@ -1,68 +1,90 @@
+# Tempo challenge
+
+A React app to harvest Tempo's team REST service.
+
+## Challenge
+
+* Build a UI showing an overview of all the teams, and allow the current user to navigate between teams to see each team's members.
+* At the top of the teams overview page, add an input field, which filters the teams when the input value changes. This input field could also be used in other pages of your app, e.g. for filtering out team members in the team page.
+
+## Solution
+
+The end points of Tempo's REST API provide segmented info of their teams and members. In order to display all information I structured the app into 3 levels:
+
+1. A Home view with all teams
+2. A Team view with all members of a selected team
+3. A Member view with the info of a selected member
+
+This structure allows some segmentation of the API calls. For example, the call for a member's inf can be made only when the third view is loaded. But there is still a lot of information still must me loaded in the Home view and passed forward to other views.
+
+As the app is small, I chose not to implement Redux, Redux-Saga nor similar solutions. Instead, I used react-router v4 with a structure to manage the transfer of props between components.
+
+This choice favors simplicity and fits quite well for small applications, specially when using React Hooks, as is the case. 
+
+Bigger applications would obviously make harder to track the passage of props between components, at which point it would be useful to implement a store to be the single source of truth for all the views of the app.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## App structure
 
-In the project directory, you can run:
+The 3 main views cited above are stored in `src/views`.
 
-### `npm start`
+The `src/components` holds the input field that filters results. It is used from the Home and the Team views. It also has a team list component.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+The all-mighty router is in `src/components`.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+```
+.
+├── public
+│   ├── favicon.ico
+│   ├── index.html
+│   └── manifest.json
+├── src
+│   ├── components
+│   │   ├── FilterForm.jsx
+│   │   ├── FilterForm.scss
+│   │   ├── Router.jsx
+│   │   └── TeamList.jsx
+│   ├── views
+│   │   ├── Home.jsx
+│   │   ├── Home.scss
+│   │   ├── Member.jsx
+│   │   ├── Member.scss
+│   │   ├── Team.jsx
+│   │   └── Team.scss
+│   ├── App.js
+│   ├── App.scss
+│   ├── App.test.js
+│   ├── config.json
+│   ├── history.js
+│   ├── index.css
+│   ├── index.js
+│   └── serviceWorker.js
+├── LICENSE
+├── README.md
+├── package-lock.json
+├── package.json
+└── yarn.lock
 
-### `npm test`
+4 directories, 26 files
+```
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Requirements
 
-### `npm run build`
+Node JS and npm.
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Installation
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+Clone this repository
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+	git clone https://github.com/Rodrigoplp/tempo-rest-client.git
 
-### `npm run eject`
+Install dependencies
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+	npm install
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Start the app
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+	npm start
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+Open a browser and access `http://localhost:3000`.
