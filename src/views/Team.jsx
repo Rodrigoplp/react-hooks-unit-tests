@@ -4,6 +4,7 @@ import axios from 'axios'
 import history from  '../history.js'
 import config from '../config.json'
 import FilterForm from '../components/FilterForm.jsx'
+import './Team.scss'
 
 // teamProps, usersProps, userIdCallback
 export default function Team(props) {
@@ -25,15 +26,23 @@ export default function Team(props) {
 
 					result.data.members.map(memberId => {
 						let arr = props.usersProps.filter(el => el.id === memberId)
-						let tupple = {
-							name: arr[0].name,
-							id: memberId
+						if (arr[0] !== undefined) {
+							let tupple = {
+								name: arr[0].name,
+								id: memberId
+							}
+							setMembers(t => [...t, tupple])
+							setFilteredMembers(t => [...t, tupple])
 						}
-						setMembers(t => [...t, tupple])
-						setFilteredMembers(t => [...t, tupple])
+						else {
+							history.push('/')
+						}
 
 						return null
 					})
+				}
+				else {
+					history.push('/')
 				}
 				setLoading(false)
 			}
@@ -49,7 +58,12 @@ export default function Team(props) {
 	// MARK: Helpers
 	let userData = (userId) => {
 		let arr = props.usersProps.filter(el => el.id === userId)
-		return arr[0].name
+		if (arr[0] !== undefined) {
+			return arr[0].name
+		}
+		else {
+			history.push('/')
+		}
 	}
 
 	let selectUser = (id) => {
@@ -71,12 +85,14 @@ export default function Team(props) {
 
 	// MARK: Return
 	return (
-		<div className='user'>
+		<div className='team'>
 
 			<button onClick={navBack}>Back</button>
 
 			{props.teamProps !== undefined &&
-			<h1>{props.teamProps.name}</h1>
+				<div className='header'>
+					<h1>{props.teamProps.name}</h1>
+				</div>
 			}
 
 			<FilterForm filterCallback = { filterCallback } />
@@ -93,7 +109,7 @@ export default function Team(props) {
 					<ul className='list'>
 						{filteredMembers.map((member, index) => (
 							<li className = 'list-item' key={index}>
-								<button onClick={() => selectUser(member.id)}>
+								<button className='selector-btn' onClick={() => selectUser(member.id)}>
 									{member.name}
 								</button>
 							</li>

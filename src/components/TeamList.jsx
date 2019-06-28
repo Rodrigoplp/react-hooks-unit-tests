@@ -7,7 +7,7 @@ export default function TeamList({ teams, users, selectTeam, selectUser }) {
 				{teams.map(team => (
 					<li className = 'list-item' key={team.id}>
 						<div>
-							<button onClick={() => selectTeam(team)}>
+							<button className='selector-btn' onClick={() => selectTeam(team)}>
 								{ team.name }
 							</button>
 						</div>
