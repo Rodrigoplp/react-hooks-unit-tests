@@ -1,0 +1,15 @@
+{
+  "parser": "babel-eslint", // https://github.com/babel/babel-eslint
+  "env": { // http://eslint.org/docs/user-guide/configuring.html#specifying-environments
+    "node": true, // Node.js global variables and Node.js-specific rules
+    "es6": true
+  },
+  "parserOptions": {
+    "ecmaVersion": 6
+  },
+  "plugins": ["prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "no-unused-vars": 1
+  }
+}

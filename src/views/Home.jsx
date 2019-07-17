@@ -31,13 +31,11 @@ export default function Home(props) {
 			}
 			catch(err) {
 				setLoading(false)
-				console.log('Fetch data error: ' + err)
 			}
 		}
 
 		fetchData()
 	}, [])
-
 
 	// MARK: - Load users
 	useEffect(() => {
@@ -52,7 +50,6 @@ export default function Home(props) {
 			}
 			catch(err) {
 				setLoadingUsers(false)
-				console.log('Fetch data error: ' + err)
 			}
 		}
 
