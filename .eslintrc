@@ -10,6 +10,10 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "no-unused-vars": 1
-  }
+    "no-unused-vars": 1,
+    "react/prop-types": 0
+  },
+  'extends': [
+    'plugin:react/recommended'
+  ]
 }

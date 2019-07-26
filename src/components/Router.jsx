@@ -6,51 +6,71 @@ import Team from '../views/Team'
 import Member from '../views/Member'
 import config from '../config.json'
 
-history.listen(location => {
-	window.scrollTo(0,0)
+history.listen(() => {
+  window.scrollTo(0, 0)
 })
 
-export default function Router(props) {
-	let [team, setTeam] = useState([])
-	let [allTeams, setAllTeams] = useState([])
-	let [users, setUsers] = useState([])
-	let [memberProps, setMemberProps] = useState({})
-	
-	let teamCallback = (el) => {
-		setTeam(el)
-	}
+export default function Router() {
+  // let [team, setTeam] = useState([])
+  let [allTeams, setAllTeams] = useState([])
+  // let [users, setUsers] = useState([])
+  let [memberProps, setMemberProps] = useState({})
+  let [teamProps, setTeamProps] = useState({})
 
-	let usersCallback = (el) => {
-		setUsers(el)
-	}
+  let teamCallback = (teamId, users) => {
+    // Remove this:
+    // setTeam(teamId)
 
-	let userIdCallback = (el) => {
-		setMemberProps({
-			url: config.api + '/user/' + el,
-			teams: allTeams
-		})
-	}
+    // Leave:
+    setTeamProps({
+      url: config.api + '/team/' + teamId,
+      team: teamId,
+      users: users,
+      cb: userIdCallback
+    })
+  }
 
-	let allTeamsCallback = (el) => {
-		setAllTeams(el)
-	}
+  let usersCallback = el => {
+    setUsers(el)
+  }
 
-	return (
-		<ReactRouter history = { history }>
-			<Switch>
-				<Route 
-					exact path='/' 
-					render={(props) => <Home teamCallback={teamCallback} usersCallback={usersCallback} allTeamsCallback={allTeamsCallback} {...props} />}
-				/>
-				<Route 
-					exact path='/team' 
-					render={(props) => <Team teamProps={team} usersProps={users} userIdCallback={userIdCallback} {...props} />}
-				/>
-				<Route
-					exact path='/member'
-					render={(props) => <Member props={memberProps} />}
-				/>
-			</Switch>
-		</ReactRouter>
-	)
+  let userIdCallback = el => {
+    setMemberProps({
+      url: config.api + '/user/' + el,
+      teams: allTeams
+    })
+  }
+
+  let allTeamsCallback = el => {
+    setAllTeams(el)
+  }
+
+  // <Route
+  //   exact
+  //   path="/team"
+  //   render={props => <Team teamProps={team} usersProps={users} userIdCallback={userIdCallback} {...props} />}
+  // />
+
+  return (
+    <ReactRouter history={history}>
+      <Switch>
+        <Route
+          exact
+          path="/"
+          render={props => (
+            <Home
+              teamCallback={teamCallback}
+              usersCallback={usersCallback}
+              allTeamsCallback={allTeamsCallback}
+              {...props}
+            />
+          )}
+        />
+
+        <Route exact path="/team" render={() => <Team props={teamProps} />} />
+
+        <Route exact path="/member" render={() => <Member props={memberProps} />} />
+      </Switch>
+    </ReactRouter>
+  )
 }
