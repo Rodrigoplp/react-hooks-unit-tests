@@ -5,7 +5,7 @@ import history from '../history.js'
 import FilterForm from '../components/FilterForm.jsx'
 import './Team.scss'
 
-export default function Team(props) {
+export default function Team({ props }) {
   // MARK: State
   let [team, setTeam] = useState([])
   let [members, setMembers] = useState([])
@@ -39,7 +39,7 @@ export default function Team(props) {
           history.push('/')
         }
       } catch (err) {
-        console.log('Fetch data error: ' + err)
+        console.log('Fetch data error:', err, JSON.stringify(props))
       }
     }
 
@@ -62,7 +62,7 @@ export default function Team(props) {
   }
 
   let selectUser = id => {
-    props.cb(id)
+    props.cb(id, props.teams)
     history.push('/member')
   }
 
@@ -93,14 +93,14 @@ export default function Team(props) {
 
       <FilterForm filterCallback={filterCallback} />
 
-      {team.length == 0 ? (
-        <div data-testId="loading">Loading...</div>
+      {team.length === 0 ? (
+        <div data-testid="loading">Loading...</div>
       ) : (
         team !== undefined && (
           <div>
             <h2>Team lead</h2>
 
-            <button data-testId="resolved" className="selector-btn" onClick={() => selectUser(team.lead)}>
+            <button data-testid="resolved" className="selector-btn" onClick={() => selectUser(team.lead)}>
               {userData(team.lead)}
             </button>
 

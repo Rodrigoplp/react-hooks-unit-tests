@@ -26,6 +26,6 @@ describe('A team page', () => {
     const { getByTestId } = render(<Team props={address} />)
     const resolvedSpan = await waitForElement(() => getByTestId('resolved'))
 
-    expeted(resolvedSpan).toHaveContent('Team')
+    expected(resolvedSpan).toHaveContent('Team')
   })
 })

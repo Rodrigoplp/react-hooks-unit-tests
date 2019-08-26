@@ -1,6 +1,6 @@
 // MARK: Definitions
 import React, { useState, useEffect } from 'react'
-import history from  '../history.js'
+import history from '../history.js'
 import axios from 'axios'
 import config from '../config.json'
 import TeamList from '../components/TeamList.jsx'
@@ -8,94 +8,88 @@ import FilterForm from '../components/FilterForm.jsx'
 import './Home.scss'
 
 export default function Home(props) {
-	// MARK: State
-	let [loading, setLoading] = useState(true)
-	let [loadingUsers, setLoadingUsers] = useState(true)
-	let [teams, setTeams] = useState([])
-	let [users, setUsers] = useState([])
-	let [filteredTeams, setFilteredTeams] = useState([])
+  // MARK: State
+  let [loading, setLoading] = useState(true)
+  let [loadingUsers, setLoadingUsers] = useState(true)
+  let [teams, setTeams] = useState([])
+  let [users, setUsers] = useState([])
+  let [filteredTeams, setFilteredTeams] = useState([])
 
-	// MARK: Effects
-	
-	// MARK: - Load teams
-	useEffect(() => {
-		let fetchData = async() => {
-			setLoading(true)
-			try {
-				let result = await axios(config.api + '/team/')
-				if (result.data) {
-					setTeams(result.data)
-					setFilteredTeams(result.data)
-				}
-				setLoading(false)
-			}
-			catch(err) {
-				setLoading(false)
-			}
-		}
+  // MARK: Effects
 
-		fetchData()
-	}, [])
+  // MARK: - Load teams
+  useEffect(() => {
+    let fetchData = async () => {
+      setLoading(true)
+      try {
+        let result = await axios(config.api + '/team/')
+        if (result.data) {
+          setTeams(result.data)
+          setFilteredTeams(result.data)
+        }
+        setLoading(false)
+      } catch (err) {
+        setLoading(false)
+      }
+    }
 
-	// MARK: - Load users
-	useEffect(() => {
-		let fetchData = async() => {
-			setLoadingUsers(true)
-			try {
-				let result = await axios(config.api + '/user/')
-				if (result.data) {
-					setUsers(result.data)
-				}
-				setLoadingUsers(false)
-			}
-			catch(err) {
-				setLoadingUsers(false)
-			}
-		}
+    fetchData()
+  }, [])
 
-		fetchData()
-	}, [])
+  // MARK: - Load users
+  useEffect(() => {
+    let fetchData = async () => {
+      setLoadingUsers(true)
+      try {
+        let result = await axios(config.api + '/user/')
+        if (result.data) {
+          setUsers(result.data)
+        }
+        setLoadingUsers(false)
+      } catch (err) {
+        setLoadingUsers(false)
+      }
+    }
 
-	// MARK: Callbacks
+    fetchData()
+  }, [])
 
-	let selectTeam = (selectedTeam) => {
-		props.teamCallback(selectedTeam)
-		props.usersCallback(users)
-		props.allTeamsCallback(teams)
-		history.push('/team')
-	}
+  // MARK: Callbacks
 
-	let selectUser = (selectedUser) => {
-		console.log('Selected user ' + selectedUser)
-	}
+  let selectTeam = selectedTeam => {
+    props.teamCallback(selectedTeam, users, teams)
+    props.usersCallback(users)
+    history.push('/team')
+  }
 
-	let filterCallback = (e) => {
-		let filtered = teams.filter(team => {
-			return team.name.toUpperCase().includes(e.target.value.toUpperCase())
-		})
+  let selectUser = selectedUser => {
+    console.log('Selected user ' + selectedUser)
+  }
 
-		setFilteredTeams(filtered)
-	}
+  let filterCallback = e => {
+    let filtered = teams.filter(team => {
+      return team.name.toUpperCase().includes(e.target.value.toUpperCase())
+    })
 
-	// MARK: Return
-	return (
-		<div className='home'>
-			<div className='header'>
-				<h1>Tempo teams</h1>
-			</div>
+    setFilteredTeams(filtered)
+  }
 
-			<FilterForm filterCallback = { filterCallback } />
+  // MARK: Return
+  return (
+    <div className="home">
+      <div className="header">
+        <h1>Tempo teams</h1>
+      </div>
 
-			{loading || loadingUsers ? (<div>Loading...</div>) : (
-				teams !== undefined &&
-				<TeamList
-					teams = { filteredTeams }
-					users = { users }
-					selectTeam = { selectTeam }
-					selectUser = { selectUser }
-				/>
-			)}
+      <FilterForm filterCallback={filterCallback} />
 
-		</div>
-	)
+      {loading || loadingUsers ? (
+        <div>Loading...</div>
+      ) : (
+        teams !== undefined && (
+          <TeamList teams={filteredTeams} users={users} selectTeam={selectTeam} selectUser={selectUser} />
+        )
+      )}
+    </div>
+  )
 }
