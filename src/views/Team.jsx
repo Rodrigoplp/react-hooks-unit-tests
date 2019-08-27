@@ -7,7 +7,7 @@ import './Team.scss'
 
 export default function Team({ props }) {
   // MARK: State
-  let [team, setTeam] = useState([])
+  let [team, setTeam] = useState(null)
   let [members, setMembers] = useState([])
   let [filteredMembers, setFilteredMembers] = useState([])
 
@@ -16,7 +16,7 @@ export default function Team({ props }) {
   useEffect(() => {
     let fetchData = async () => {
       try {
-        let result = await axios(props.url)
+        let result = await axios.get(props.url)
         if (result.data) {
           setTeam(result.data)
 
@@ -81,22 +81,22 @@ export default function Team({ props }) {
   // MARK: Return
   return (
     <div className="team">
-      {props.team !== undefined && (
-        <div className="header">
-          <h1>Team {props.team.name}</h1>
-        </div>
-      )}
-
-      <div className="back">
-        <button className="back-btn" onClick={navBack}>{`< Back to teams`}</button>
-      </div>
-
-      <FilterForm filterCallback={filterCallback} />
-
-      {team.length === 0 ? (
+      {team === null ? (
         <div data-testid="loading">Loading...</div>
       ) : (
-        team !== undefined && (
+        <div>
+          {props.team !== undefined && (
+            <div className="header">
+              <h1>Team {props.team.name}</h1>
+            </div>
+          )}
+
+          <div className="back">
+            <button className="back-btn" onClick={navBack}>{`< Back to teams`}</button>
+          </div>
+
+          <FilterForm filterCallback={filterCallback} />
+
           <div>
             <h2>Team lead</h2>
 
@@ -116,7 +116,7 @@ export default function Team({ props }) {
               ))}
             </ul>
           </div>
-        )
+        </div>
       )}
     </div>
   )

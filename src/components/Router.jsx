@@ -12,7 +12,7 @@ history.listen(() => {
 
 export default function Router() {
   // let [team, setTeam] = useState([])
-  let [users, setUsers] = useState([])
+  // let [users, setUsers] = useState([])
   let [memberProps, setMemberProps] = useState({})
   let [teamProps, setTeamProps] = useState({})
 
@@ -28,10 +28,6 @@ export default function Router() {
       users: users,
       cb: userIdCallback
     })
-  }
-
-  let usersCallback = el => {
-    setUsers(el)
   }
 
   let userIdCallback = (el, teams) => {
@@ -50,11 +46,7 @@ export default function Router() {
   return (
     <ReactRouter history={history}>
       <Switch>
-        <Route
-          exact
-          path="/"
-          render={props => <Home teamCallback={teamCallback} usersCallback={usersCallback} {...props} />}
-        />
+        <Route exact path="/" render={props => <Home teamCallback={teamCallback} {...props} />} />
 
         <Route exact path="/team" render={() => <Team props={teamProps} />} />
 

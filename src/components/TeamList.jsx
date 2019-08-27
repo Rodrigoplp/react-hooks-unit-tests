@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function TeamList({ teams, users, selectTeam, selectUser }) {
+export default function TeamList({ teams, selectTeam }) {
   return (
     <div className="teams">
       <ul className="list">

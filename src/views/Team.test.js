@@ -13,19 +13,22 @@ describe('A team page', () => {
   })
 
   it('should fetch and display data', async () => {
-    const callData = {
-      teamProps: {
-        id: 3
-      },
-      usersProps: [{ name: 'UserName' }]
-    }
+    const callData = { lead: 1, id: 2, name: 'Awesome Tricksters', members: [2, 3, 4] }
 
     axiosMock.get.mockResolvedValueOnce({ data: callData })
 
-    const address = { url: '/team3' }
-    const { getByTestId } = render(<Team props={address} />)
+    const mockProps = {
+      users: [
+        { id: 1, name: 'Leader', username: 'team leader' },
+        { id: 2, name: 'First Member', username: 'first member' },
+        { id: 3, name: 'Second Member', username: 'second member' },
+        { id: 4, name: 'Third Member', username: 'third member' }
+      ]
+    }
+
+    const { getByTestId } = render(<Team props={mockProps} />)
     const resolvedSpan = await waitForElement(() => getByTestId('resolved'))
 
-    expected(resolvedSpan).toHaveContent('Team')
+    expect(resolvedSpan).toHaveTextContent(mockProps.users[0].name)
   })
 })

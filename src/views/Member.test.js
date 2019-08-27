@@ -14,9 +14,6 @@ describe('A members page', () => {
   it('should fetch and display data', async () => {
     const callData = {
       username: 'goodpanda',
-      member_teams: [3],
-      lead_teams: [],
-      id: 15,
       name: 'Charlotte Amsterdan'
     }
 
@@ -24,9 +21,11 @@ describe('A members page', () => {
 
     const address = { url: '/user15' }
     const { getByTestId } = render(<Member props={address} />)
-    const resolvedSpan = await waitForElement(() => getByTestId('resolved'))
+    const resolvedName = await waitForElement(() => getByTestId('resolved-name'))
+    const resolvedUsername = await waitForElement(() => getByTestId('resolved-username'))
 
-    expect(resolvedSpan).toHaveTextContent('Member ' + callData.name)
+    expect(resolvedName).toHaveTextContent('Member ' + callData.name)
+    expect(resolvedUsername).toHaveTextContent(callData.username)
     expect(axiosMock.get).toHaveBeenCalledTimes(1)
     expect(axiosMock.get).toHaveBeenCalledWith(address.url)
   })

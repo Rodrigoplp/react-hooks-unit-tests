@@ -58,7 +58,6 @@ export default function Home(props) {
 
   let selectTeam = selectedTeam => {
     props.teamCallback(selectedTeam, users, teams)
-    props.usersCallback(users)
     history.push('/team')
   }
 

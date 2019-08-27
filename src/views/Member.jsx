@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import history from '../history.js'
-// import config from '../config.json'
 import './Member.scss'
 
 export default function Member({ props }) {
@@ -48,7 +47,7 @@ export default function Member({ props }) {
         user !== undefined && (
           <div>
             <div className="header">
-              <span data-testid="resolved">
+              <span data-testid="resolved-name">
                 <h1>Member {user.name}</h1>
               </span>
             </div>
@@ -59,7 +58,9 @@ export default function Member({ props }) {
 
             <h2>Username:</h2>
             <div className="username">
-              <p>{user.username}</p>
+              <span data-testid="resolved-username">
+                <p>{user.username}</p>
+              </span>
             </div>
 
             <h2>Member of:</h2>
