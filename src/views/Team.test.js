@@ -12,7 +12,7 @@ describe('A team page', () => {
     expect(getByTestId('loading')).toHaveTextContent('Loading...')
   })
 
-  it('should fetch and display data', async () => {
+  it('should fetch data and display team lead', async () => {
     const callData = { lead: 1, id: 2, name: 'Awesome Tricksters', members: [2, 3, 4] }
 
     axiosMock.get.mockResolvedValueOnce({ data: callData })
@@ -26,9 +26,32 @@ describe('A team page', () => {
       ]
     }
 
-    const { getByTestId } = render(<Team props={mockProps} />)
-    const resolvedSpan = await waitForElement(() => getByTestId('resolved'))
+    const { getByTestId, getByText } = render(<Team props={mockProps} />)
 
-    expect(resolvedSpan).toHaveTextContent(mockProps.users[0].name)
+    const resolvedLead = await waitForElement(() => getByTestId('resolved-lead'))
+
+    expect(resolvedLead).toHaveTextContent(mockProps.users[0].name)
+    expect(getByText(mockProps.users[2].name)).toBeInTheDocument()
+  })
+
+  it('should fetch data and display team members', async () => {
+    const callData = { lead: 1, id: 2, name: 'Awesome Tricksters', members: [2, 3, 4] }
+
+    axiosMock.get.mockResolvedValueOnce({ data: callData })
+
+    const mockProps = {
+      users: [
+        { id: 2, name: 'First Member', username: 'first member' },
+        { id: 3, name: 'Second Member', username: 'second member' },
+        { id: 4, name: 'Third Member', username: 'third member' }
+      ]
+    }
+
+    const { getAllByTestId, getByText } = render(<Team props={mockProps} />)
+    const resolvedList = await waitForElement(() => getAllByTestId('resolved-list'))
+
+    expect(resolvedList).toContain(getByText(mockProps.users[0].name))
+    expect(resolvedList).toContain(getByText(mockProps.users[1].name))
+    expect(resolvedList).toContain(getByText(mockProps.users[2].name))
   })
 })

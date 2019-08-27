@@ -100,7 +100,7 @@ export default function Team({ props }) {
           <div>
             <h2>Team lead</h2>
 
-            <button data-testid="resolved" className="selector-btn" onClick={() => selectUser(team.lead)}>
+            <button data-testid="resolved-lead" className="selector-btn" onClick={() => selectUser(team.lead)}>
               {userData(team.lead)}
             </button>
 
@@ -109,7 +109,7 @@ export default function Team({ props }) {
             <ul className="list">
               {filteredMembers.map((member, index) => (
                 <li className="list-item" key={index}>
-                  <button className="selector-btn" onClick={() => selectUser(member.id)}>
+                  <button data-testid="resolved-list" className="selector-btn" onClick={() => selectUser(member.id)}>
                     {member.name}
                   </button>
                 </li>
