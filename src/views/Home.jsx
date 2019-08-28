@@ -7,7 +7,7 @@ import TeamList from '../components/TeamList.jsx'
 import FilterForm from '../components/FilterForm.jsx'
 import './Home.scss'
 
-export default function Home(props) {
+export default function Home({ props }) {
   // MARK: State
   let [loading, setLoading] = useState(true)
   let [loadingUsers, setLoadingUsers] = useState(true)
@@ -57,7 +57,7 @@ export default function Home(props) {
   // MARK: Callbacks
 
   let selectTeam = selectedTeam => {
-    props.teamCallback(selectedTeam, users, teams)
+    props(selectedTeam, users, teams)
     history.push('/team')
   }
 

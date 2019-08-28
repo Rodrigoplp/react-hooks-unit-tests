@@ -11,16 +11,10 @@ history.listen(() => {
 })
 
 export default function Router() {
-  // let [team, setTeam] = useState([])
-  // let [users, setUsers] = useState([])
   let [memberProps, setMemberProps] = useState({})
   let [teamProps, setTeamProps] = useState({})
 
   let teamCallback = (teamId, users, teams) => {
-    // Remove this:
-    // setTeam(teamId)
-
-    // Leave:
     setTeamProps({
       url: config.api + '/team/' + teamId.id,
       team: teamId,
@@ -37,16 +31,10 @@ export default function Router() {
     })
   }
 
-  // <Route
-  //   exact
-  //   path="/team"
-  //   render={props => <Team teamProps={team} usersProps={users} userIdCallback={userIdCallback} {...props} />}
-  // />
-
   return (
     <ReactRouter history={history}>
       <Switch>
-        <Route exact path="/" render={props => <Home teamCallback={teamCallback} {...props} />} />
+        <Route exact path="/" render={() => <Home props={teamCallback} />} />
 
         <Route exact path="/team" render={() => <Team props={teamProps} />} />
 
