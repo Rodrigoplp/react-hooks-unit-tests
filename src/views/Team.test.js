@@ -27,7 +27,6 @@ describe('A team page', () => {
     }
 
     const { getByTestId, getByText } = render(<Team props={mockProps} />)
-
     const resolvedLead = await waitForElement(() => getByTestId('resolved-lead'))
 
     expect(resolvedLead).toHaveTextContent(mockProps.users[0].name)

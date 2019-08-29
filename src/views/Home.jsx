@@ -2,17 +2,14 @@
 import React, { useState, useEffect } from 'react'
 import history from '../history.js'
 import axios from 'axios'
-import config from '../config.json'
 import TeamList from '../components/TeamList.jsx'
 import FilterForm from '../components/FilterForm.jsx'
 import './Home.scss'
 
 export default function Home({ props }) {
   // MARK: State
-  let [loading, setLoading] = useState(true)
-  let [loadingUsers, setLoadingUsers] = useState(true)
-  let [teams, setTeams] = useState([])
-  let [users, setUsers] = useState([])
+  let [teams, setTeams] = useState(null)
+  let [users, setUsers] = useState(null)
   let [filteredTeams, setFilteredTeams] = useState([])
 
   // MARK: Effects
@@ -20,49 +17,41 @@ export default function Home({ props }) {
   // MARK: - Load teams
   useEffect(() => {
     let fetchData = async () => {
-      setLoading(true)
       try {
-        let result = await axios(config.api + '/team/')
+        let result = await axios.get(props.teamUrl)
         if (result.data) {
           setTeams(result.data)
           setFilteredTeams(result.data)
         }
-        setLoading(false)
       } catch (err) {
-        setLoading(false)
+        console.log('Error loading users', err)
       }
     }
 
     fetchData()
-  }, [])
+  }, [props])
 
   // MARK: - Load users
   useEffect(() => {
     let fetchData = async () => {
-      setLoadingUsers(true)
       try {
-        let result = await axios(config.api + '/user/')
+        let result = await axios.get(props.userUrl)
         if (result.data) {
           setUsers(result.data)
         }
-        setLoadingUsers(false)
       } catch (err) {
-        setLoadingUsers(false)
+        console.log('Error loading teams', err)
       }
     }
 
     fetchData()
-  }, [])
+  }, [props])
 
   // MARK: Callbacks
 
   let selectTeam = selectedTeam => {
-    props(selectedTeam, users, teams)
+    props.cb(selectedTeam, users, teams)
     history.push('/team')
-  }
-
-  let selectUser = selectedUser => {
-    console.log('Selected user ' + selectedUser)
   }
 
   let filterCallback = e => {
@@ -73,20 +62,24 @@ export default function Home({ props }) {
     setFilteredTeams(filtered)
   }
 
+  //
+
   // MARK: Return
   return (
     <div className="home">
-      <div className="header">
-        <h1>Tempo teams</h1>
-      </div>
-
-      <FilterForm filterCallback={filterCallback} />
-
-      {loading || loadingUsers ? (
-        <div>Loading...</div>
+      {users === null || teams === null ? (
+        <div data-testid="loading">Loading...</div>
       ) : (
         teams !== undefined && (
-          <TeamList teams={filteredTeams} users={users} selectTeam={selectTeam} selectUser={selectUser} />
+          <div data-testid="content">
+            <div data-testid="resolved" className="header">
+              <h1>Tempo teams</h1>
+            </div>
+
+            <FilterForm filterCallback={filterCallback} />
+
+            <TeamList teams={filteredTeams} selectTeam={selectTeam} />
+          </div>
         )
       )}
     </div>

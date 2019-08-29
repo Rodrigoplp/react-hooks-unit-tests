@@ -24,6 +24,12 @@ export default function Router() {
     })
   }
 
+  let homeProps = {
+    teamUrl: config.api + '/team/',
+    userUrl: config.api + '/user/',
+    cb: teamCallback
+  }
+
   let userIdCallback = (el, teams) => {
     setMemberProps({
       url: config.api + '/user/' + el,
@@ -34,7 +40,7 @@ export default function Router() {
   return (
     <ReactRouter history={history}>
       <Switch>
-        <Route exact path="/" render={() => <Home props={teamCallback} />} />
+        <Route exact path="/" render={() => <Home props={homeProps} />} />
 
         <Route exact path="/team" render={() => <Team props={teamProps} />} />
 
