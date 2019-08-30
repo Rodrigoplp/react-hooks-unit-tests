@@ -34,7 +34,7 @@ describe('A Home page', () => {
     expect(getByText(callData[2].name)).toBeInTheDocument()
   })
 
-  it('should display correct filtered results', async () => {
+  it('should display correct filtered teams', async () => {
     let callData = [
       { name: 'Mock team 1', id: 1 },
       { name: 'Mock team 2', id: 2 },
@@ -53,10 +53,11 @@ describe('A Home page', () => {
     const resolved = await waitForElement(() => getByPlaceholderText('Filter'))
 
     fireEvent.change(resolved, { target: { value: '2' } })
+
     expect(getByText(callData[1].name)).toBeInTheDocument()
   })
 
-  it('should not display filtered out results', async () => {
+  it('should not display filtered out teams', async () => {
     let callData = [
       { name: 'Mock team 1', id: 1 },
       { name: 'Mock team 2', id: 2 },
@@ -75,6 +76,7 @@ describe('A Home page', () => {
     const resolved = await waitForElement(() => getByPlaceholderText('Filter'))
 
     fireEvent.change(resolved, { target: { value: '2' } })
+
     expect(getByTestId('content')).not.toHaveTextContent(callData[0].name)
     expect(getByTestId('content')).not.toHaveTextContent(callData[2].name)
     expect(getByTestId('content')).not.toHaveTextContent(callData[3].name)

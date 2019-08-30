@@ -97,7 +97,7 @@ export default function Team({ props }) {
 
           <FilterForm filterCallback={filterCallback} />
 
-          <div>
+          <div data-testid="content">
             <h2>Team lead</h2>
 
             <button data-testid="resolved-lead" className="selector-btn" onClick={() => selectUser(team.lead)}>
