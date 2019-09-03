@@ -15,9 +15,9 @@ The end points of Tempo's REST API provide segmented info of their teams and mem
 2. A Team view with all members of a selected team
 3. A Member view with the info of a selected member
 
-This structure allows some segmentation of the API calls. For example, the call for a member's inf can be made only when the third view is loaded. But there is still a lot of information still must me loaded in the Home view and passed forward to other views.
+This structure allows segmentation of the API calls. For example, the call for a member's data is made only when the third view is loaded. Yet, many calls are done right when loading the first Home view, and the data retrieved there must be passed down to the other components.
 
-As the app is small, I chose not to implement Redux, Redux-Saga nor similar solutions. Instead, I used react-router v4 with a structure to manage the transfer of props between components.
+To do so, I chose not to implement Redux, Redux-Saga nor similar solutions. Instead, I used react-router v4 with a structure to manage the transfer of props between components.
 
 This choice favors simplicity and fits quite well for small applications, specially when using React Hooks, as is the case. 
 
@@ -46,12 +46,17 @@ The all-mighty router is in `src/components`.
 │   │   ├── Router.jsx
 │   │   └── TeamList.jsx
 │   ├── views
+│   │   ├── __mocks__
+│   │   │   └── axios.js
 │   │   ├── Home.jsx
 │   │   ├── Home.scss
+│   │   ├── Home.test.js
 │   │   ├── Member.jsx
 │   │   ├── Member.scss
+│   │   ├── Member.test.js
 │   │   ├── Team.jsx
-│   │   └── Team.scss
+│   │   ├── Team.scss
+│   │   └── Team.test.js
 │   ├── App.js
 │   ├── App.scss
 │   ├── App.test.js
@@ -59,14 +64,13 @@ The all-mighty router is in `src/components`.
 │   ├── history.js
 │   ├── index.css
 │   ├── index.js
-│   └── serviceWorker.js
+│   ├── serviceWorker.js
+│   └── setupTests.js
 ├── LICENSE
 ├── README.md
 ├── package-lock.json
 ├── package.json
-└── yarn.lock
-
-4 directories, 26 files
+└── pbcopy
 ```
 
 ## Requirements
@@ -88,3 +92,9 @@ Start the app
 	npm start
 
 Open a browser and access `http://localhost:3000`.
+
+## Tests
+
+Test written with Jest and React Testing Library. To run tests:
+
+	yarn test
